@@ -45,7 +45,7 @@ class AuthController(
     fun register(@RequestBody request: RegisterRequest): ResponseEntity<Any> {
         val user = UserEntity(
             username = request.username,
-            password = passwordEncoder.encode(request.password),
+            password = request.password
         )
         usersService.create(user)
         return ResponseEntity.status(HttpStatus.CREATED).build()
