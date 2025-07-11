@@ -34,4 +34,11 @@ class CustomerController(
         return ResponseEntity.ok(customerService.updateCustomer(customerNumber, request))
     }
 
+    @GetMapping("/customers")
+    fun listCustomers(): ResponseEntity<List<CustomerResponse>> {
+        authenticatedUserProvider.assertUserIdExists()
+
+        return ResponseEntity.ok(customerService.listCustomers())
+    }
+
 }

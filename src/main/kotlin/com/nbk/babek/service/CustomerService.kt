@@ -61,4 +61,15 @@ class CustomerService(
         )
     }
 
+    fun listCustomers(): List<CustomerResponse> {
+        return customerRepository.findAll().map {
+            CustomerResponse(
+                customerNumber = it.customerNumber,
+                customerName = it.customerName,
+                dateOfBirth = it.dateOfBirth,
+                gender = it.gender
+            )
+        }
+    }
+
 }
