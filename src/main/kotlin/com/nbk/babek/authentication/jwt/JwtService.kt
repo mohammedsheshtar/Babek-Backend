@@ -16,12 +16,13 @@ class JwtService(
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(jwtSecret.encodeToByteArray())
     private val expirationMs: Long = 1000 * 60 * 60 * 24
 
-    fun generateToken(username: String): String {
+    fun generateToken(username: String, userId: Long?): String {
         val now = Date()
         val expiry = Date(now.time + expirationMs)
 
         return Jwts.builder()
             .setSubject(username)
+            .claim("id", userId)
             .setIssuedAt(now)
             .setExpiration(expiry)
             .signWith(secretKey)
@@ -43,5 +44,15 @@ class JwtService(
             false
         }
     }
+
+    fun extractUserId(token: String): Long =
+        Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
+            .body
+            .get("id", Integer::class.java)
+            .toLong()
+
 
 }

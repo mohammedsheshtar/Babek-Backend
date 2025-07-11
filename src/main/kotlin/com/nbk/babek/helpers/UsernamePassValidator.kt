@@ -4,7 +4,7 @@ import com.nbk.babek.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
-class UserHelpers(
+class UsernamePassValidator(
     private val userRepository: UserRepository,
 ) {
     fun validateUsername(username: String) {

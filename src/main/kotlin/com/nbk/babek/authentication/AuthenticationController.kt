@@ -34,12 +34,18 @@ class AuthController(
 
         if (authentication.isAuthenticated) {
             val userDetails = userDetailsService.loadUserByUsername(authRequest.username)
-            val token = jwtService.generateToken(userDetails.username)
+
+            // 🔥 Fetch the full user entity to get the ID
+            val userEntity = userRepository.findByUsername(userDetails.username)
+                ?: throw UsernameNotFoundException("User not found with username: ${userDetails.username}")
+
+            val token = jwtService.generateToken(userDetails.username, userEntity.id)
             return TokenResponse(token)
         } else {
             throw UsernameNotFoundException("Invalid user request!")
         }
     }
+
 
     @PostMapping("/register")
     fun register(@RequestBody request: RegisterRequest): ResponseEntity<Any> {
