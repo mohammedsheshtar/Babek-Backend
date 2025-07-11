@@ -2,6 +2,7 @@ package com.nbk.babek.service
 
 import com.nbk.babek.dto.CustomerRequest
 import com.nbk.babek.dto.CustomerResponse
+import com.nbk.babek.dto.UpdateCustomerRequest
 import com.nbk.babek.helpers.CustomerNumberGenerator
 import com.nbk.babek.helpers.CustomerValidator
 import com.nbk.babek.repository.CustomerEntity
@@ -36,4 +37,28 @@ class CustomerService(
             gender = newCustomer.gender
         )
     }
+
+    fun updateCustomer(customerNumber: Int, request: UpdateCustomerRequest): CustomerResponse {
+        val existingCustomer = customerRepository.findByCustomerNumber(customerNumber)
+            ?: throw IllegalArgumentException("Customer with number $customerNumber does not exist")
+
+        customerValidator.validateRequest(request)
+
+        val updatedCustomer = existingCustomer.copy(
+            customerName = request.customerName ?: existingCustomer.customerName,
+            dateOfBirth = request.dateOfBirth ?: existingCustomer.dateOfBirth,
+            gender = request.gender ?: existingCustomer.gender
+        )
+
+
+        customerRepository.save(updatedCustomer)
+
+        return CustomerResponse(
+            customerNumber = updatedCustomer.customerNumber,
+            customerName = updatedCustomer.customerName,
+            dateOfBirth = updatedCustomer.dateOfBirth,
+            gender = updatedCustomer.gender
+        )
+    }
+
 }

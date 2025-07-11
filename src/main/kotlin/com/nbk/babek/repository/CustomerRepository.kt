@@ -12,6 +12,8 @@ import java.time.LocalDate
 @Named
 interface CustomerRepository : JpaRepository<CustomerEntity, Long> {
     fun existsByCustomerNumber(customerNumber: Int): Boolean
+    fun findByCustomerNumber(customerNumber: Int): CustomerEntity?
+
 }
 
 @Entity

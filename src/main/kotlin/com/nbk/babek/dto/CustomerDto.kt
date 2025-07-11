@@ -14,3 +14,9 @@ data class CustomerResponse(
     val dateOfBirth: LocalDate,
     val gender: String
 )
+
+data class UpdateCustomerRequest(
+    val customerName: String? = null,
+    val dateOfBirth: LocalDate? = null,
+    val gender: String? = null
+)

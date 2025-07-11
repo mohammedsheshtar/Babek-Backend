@@ -3,6 +3,7 @@ package com.nbk.babek.controller
 import com.hazelcast.spi.impl.operationservice.impl.responses.Response
 import com.nbk.babek.dto.CustomerRequest
 import com.nbk.babek.dto.CustomerResponse
+import com.nbk.babek.dto.UpdateCustomerRequest
 import com.nbk.babek.helpers.AuthenticatedUserProvider
 import com.nbk.babek.service.CustomerService
 import org.springframework.http.ResponseEntity
@@ -23,5 +24,14 @@ class CustomerController(
 
     }
 
-    //@GetMapping("/customers")
+    @PostMapping("/customers/{customerNumber}")
+    fun updateCustomer(
+        @PathVariable customerNumber: Int,
+        @RequestBody request: UpdateCustomerRequest
+    ): ResponseEntity<CustomerResponse> {
+        authenticatedUserProvider.assertUserIdExists()
+
+        return ResponseEntity.ok(customerService.updateCustomer(customerNumber, request))
+    }
+
 }
